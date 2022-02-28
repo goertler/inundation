@@ -19,11 +19,12 @@ f_get_dayflow <- function(){
 
     dat_full <- do.call(dplyr::bind_rows, dat)
 
-    yolo <- dat_full %>%
-        dplyr::select(Date, YOLO) %>%
+    dayflow <- dat_full %>%
+        dplyr::select(Date, YOLO, SAC) %>%
         dplyr::mutate(Date = lubridate::mdy(Date)) %>%
         dplyr::distinct() %>%
-        dplyr::mutate(YOLO = as.numeric(YOLO))
+        dplyr::mutate(YOLO = as.numeric(YOLO),
+                      SAC = as.numeric(SAC))
 
     #print("Data downloaded!")
 
