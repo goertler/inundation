@@ -4,7 +4,11 @@
 \alias{get_fre}
 \title{Load Fremont weir Sacramento river height}
 \usage{
-get_fre(stationID = "FRE", start = "1995-02-23", end = "2021-01-01")
+get_fre(
+  stationID = "FRE",
+  start = "1940-01-01",
+  end = as.character(Sys.Date())
+)
 }
 \arguments{
 \item{stationID}{Station identifier (see https://info.water.ca.gov/staMeta.html)}

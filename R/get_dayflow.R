@@ -5,6 +5,20 @@
 #' @importFrom magrittr %>%
 get_dayflow <- function(){
 
+    # create cache dir if it doesn't exist
+    if (!(dir.exists(rappdirs::user_cache_dir("inundation")))) {
+        dir.create(rappdirs::user_cache_dir("inundation"), recursive = TRUE)
+    }
+
+    # read in weir data from cache if it exists
+    if (file.exists(file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"))) {
+        message("Reading dayflow data from cache.")
+        return(read_csv(file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"),
+                        progress = FALSE,
+                        show_col_types = FALSE))
+    }
+
+
     # get metadata
     m <- jsonlite::fromJSON("https://data.cnra.ca.gov/dataset/06ee2016-b138-47d7-9e85-f46fae674536.jsonld")
 
@@ -30,6 +44,6 @@ get_dayflow <- function(){
                       date = Date)
 
     # write out
-    #readr::write_csv(raw_dayflow, glue("data_raw/raw_dayflow.csv"))
+    write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
 
 }
