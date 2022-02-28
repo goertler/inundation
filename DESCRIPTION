@@ -1,20 +1,26 @@
 Package: inundation
-Title: What the Package Does (One Line, Title Case)
+Title: Calculate Delta Inundation Metrics
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Jeanette",
+           family = "Clark",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+           email = "jclark@nceas.ucsb.edu",
+           comment = c(ORCID = "https://orcid.org/0000-0003-4703-1974"))
+Description: Calculate Delta Inundation Metrics
+License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
+    dplyr,
+    imputeTS,
+    janitor,
+    jsonlite,
+    lubridate,
+    rappdirs,
+    readr,
     wateRshedTools (>= 0.1.1)
-Remotes:  
+Remotes: 
     ryanpeek
