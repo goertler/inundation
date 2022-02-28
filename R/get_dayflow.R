@@ -13,7 +13,7 @@ get_dayflow <- function(){
     # read in weir data from cache if it exists
     if (file.exists(file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"))) {
         message("Reading dayflow data from cache.")
-        return(read_csv(file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"),
+        return(readr::read_csv(file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"),
                         progress = FALSE,
                         show_col_types = FALSE))
     }
