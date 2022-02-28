@@ -3,7 +3,7 @@
 #' @return data.frame of dayflow data
 #' @export
 #' @importFrom magrittr %>%
-f_get_dayflow <- function(){
+get_dayflow <- function(){
 
     # get metadata
     m <- jsonlite::fromJSON("https://data.cnra.ca.gov/dataset/06ee2016-b138-47d7-9e85-f46fae674536.jsonld")
@@ -24,9 +24,10 @@ f_get_dayflow <- function(){
         dplyr::mutate(Date = lubridate::mdy(Date)) %>%
         dplyr::distinct() %>%
         dplyr::mutate(YOLO = as.numeric(YOLO),
-                      SAC = as.numeric(SAC))
-
-    #print("Data downloaded!")
+                      SAC = as.numeric(SAC)) %>%
+        dplyr::rename(yolo_dayflow = YOLO,
+                      sac_dayflow = SAC,
+                      date = Date)
 
     # write out
     #readr::write_csv(raw_dayflow, glue("data_raw/raw_dayflow.csv"))
