@@ -22,6 +22,7 @@ The primary function, `calc_inundataion()` downloads all available data from the
 
 ``` r
 library(inundation)
+library(dplyr)
 
 inun <- calc_inundataion()
 
