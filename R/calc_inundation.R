@@ -30,7 +30,7 @@ calc_indundation <- function(){
     discharge_sac_na$height_sac_na <- imputeTS::na_ma(discharge_sac_na$height_sac, k = 7, weighting = "exponential", maxgap = Inf)
 
 
-    dayflow <- get_dayflow()
+    dayflow <- get_dayflow() # the dplyr changes throw a bunch of warnings, there should not be NAs - lets check in on this?
 
     # merge two water datasets
     all_flows <- dplyr::left_join(dayflow, discharge_sac_na, by = "date") %>%
