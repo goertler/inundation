@@ -39,9 +39,13 @@ calc_indundation <- function(){
 
     # definition for inundation days
     for (i in 1:nrow(all_flows)){
-        if (all_flows[i,"height_sac_na"] < 33.5){
+        if (all_flows[i,"date"] < as.Date("2016-10-03") & all_flows[i,"height_sac_na"] < 33.5){
             all_flows[i,"inund_days"] <- 0}
-        else if (all_flows[i, "height_sac_na"] >= 33.5){
+        if (all_flows[i,"date"] >= as.Date("2016-10-03") & all_flows[i,"height_sac_na"] < 32.0){
+            all_flows[i,"inund_days"] <- 0}
+        else if (all_flows[i,"date"] < as.Date("2016-10-03") & all_flows[i, "height_sac_na"] >= 33.5){
+            all_flows[i, "inund_days"] <- all_flows[i-1, "inund_days"]+1}
+        else if (all_flows[i,"date"] >= as.Date("2016-10-03") & all_flows[i, "height_sac_na"] >= 32.0){
             all_flows[i, "inund_days"] <- all_flows[i-1, "inund_days"]+1}
         else {
             all_flows[i, "inund_days"] <- 0 }
