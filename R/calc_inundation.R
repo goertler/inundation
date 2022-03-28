@@ -4,7 +4,7 @@
 
 calc_indundation <- function(){
 
-    fre <- get_fre()
+    fre <- dplyr::get_fre()
     fre$date <- as.Date(fre$datetime)
 
     # remove unrealistic values (Peak Stage of Record 41.02')
