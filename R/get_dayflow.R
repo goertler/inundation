@@ -28,14 +28,21 @@ get_dayflow <- function(){
 
     urls <- file_table$`dcat:accessURL` %>% unlist()
 
+    # read in the data
+    # this particular file has an extra table at the end (not tidy!)
+    url_2019 <- grep("dayflowcalculations2019", urls, value = TRUE)
+    url_rest <- grep("dayflowcalculations2019", urls, value = TRUE, invert = TRUE)
+
     col_types <- readr::cols(.default = readr::col_character())
-    dat <- lapply(urls, readr::read_csv, col_types=col_types, show_col_types = FALSE, progress = FALSE)
+    dat <- lapply(url_rest, readr::read_csv, col_types=col_types, show_col_types = FALSE, progress = FALSE)
+
+    dat[[length(dat)+1]] <- readr::read_csv(url_2019, col_types=col_types, n_max = 366, show_col_types = FALSE, progress = FALSE)
 
     dat_full <- do.call(dplyr::bind_rows, dat)
 
     dayflow <- dat_full %>%
         dplyr::select(Date, YOLO, SAC) %>%
-        dplyr::mutate(Date = lubridate::mdy(Date)) %>%
+        dplyr::mutate(Date = lubridate::parse_date_time(Date, orders = c("mdy", "ymd", "dmy"))) %>%
         dplyr::distinct() %>%
         dplyr::mutate(YOLO = as.numeric(YOLO),
                       SAC = as.numeric(SAC)) %>%
