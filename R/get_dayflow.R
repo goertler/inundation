@@ -50,6 +50,8 @@ get_dayflow <- function(){
                       sac_dayflow = SAC,
                       date = Date)
 
+    # filter out all NA row
+
     # write out
     write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
 
