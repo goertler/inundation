@@ -1,6 +1,8 @@
-### clean fremont weir/Sacramento river height
-### load dayflow
-### merge and calculate inundation days (inund_days) & inundation (yes = 1, no = 0)
+#' Calculate number of inundation days
+#'
+#' @return data.frame of dayflow data
+#' @export
+#' @importFrom magrittr %>%
 
 calc_indundation <- function(){
 
