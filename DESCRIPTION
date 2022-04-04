@@ -2,11 +2,15 @@ Package: inundation
 Title: Calculate Delta Inundation Metrics
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Jeanette",
+    c(person(given = "Jeanette",
            family = "Clark",
            role = c("aut", "cre"),
            email = "jclark@nceas.ucsb.edu",
-           comment = c(ORCID = "https://orcid.org/0000-0003-4703-1974"))
+           comment = c(ORCID = "https://orcid.org/0000-0003-4703-1974")),
+    person(given = "Pascale",
+           family = "Goertler",
+           role = c("aut"),
+           email = "Pascale.Goertler@deltacouncil.ca.gov"))
 Description: Calculate Delta Inundation Metrics
 License: Apache License (>= 2)
 Encoding: UTF-8
