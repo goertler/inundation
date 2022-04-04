@@ -6,7 +6,7 @@
 
 calc_indundation <- function(){
 
-    fre <- dplyr::get_fre()
+    fre <- get_fre()
     fre$date <- as.Date(fre$datetime)
 
     # remove unrealistic values (Peak Stage of Record 41.02')
@@ -19,11 +19,11 @@ calc_indundation <- function(){
         dplyr::summarise(height_sac = max(.data$value, na.rm = TRUE))
 
     # look for missing dates
-    time.check <- seq(as.Date('1995-02-23'), as.Date('2021-01-01'), by = 'day')
+    time.check <- seq(as.Date('1984-01-01'),  Sys.Date(), by = 'day')
 
     continous_dates <- data.frame(x = 1:length(time.check),
-                                   date = seq(as.Date('1995-02-23'),
-                                              as.Date('2021-01-01'),
+                                   date = seq(as.Date('1984-01-01'),
+                                              Sys.Date(),
                                               by='day'))
 
     discharge_sac_na <- dplyr::full_join(discharge_sac, continous_dates, by = "date") %>%
@@ -37,27 +37,29 @@ calc_indundation <- function(){
     # merge two water datasets
     all_flows <- dplyr::left_join(dayflow, discharge_sac_na, by = "date") %>%
         # get only the subset where we filled in the sac NAs
-        dplyr::filter(!is.na(.data$height_sac_na))
+        dplyr::filter(!is.na(.data$height_sac_na)) %>%
+        dplyr::mutate(inund_days = NA)
+
 
     # definition for inundation days
     # add datum change on Oct. 3, 2016
     for (i in 1:nrow(all_flows)){
-        if (all_flows[i,"date"] <.Date("2016-10-03") & all_flows[i,"height_sac"] < 33.5){
-            all_flows[i,"inund_days"] <- 0}
-        else if (all_flows[i,"date"] <.Date("2016-10-03") & all_flows[i, "height_sac"] >= 33.5){
-            all_flows[i, "inund_days"] <- all_flows[i-1, "inund_days"]+1}
-        if (all_flows[i,"date"] >=.Date("2016-10-03") & all_flows[i,"height_sac"] < 32.0){
-            all_flows[i,"inund_days"] <- 0}
-        else if (all_flows[i,"date"] >=.Date("2016-10-03") & all_flows[i, "height_sac"] >= 32.0){
-            all_flows[i, "inund_days"] <- all_flows[i-1, "inund_days"]+1}
+        if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] < 33.5){
+            all_flows$inund_days[i] <- 0}
+        else if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 33.5){
+            all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
+        else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] < 32.0){
+            all_flows$inund_days[i] <- 0}
+        else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 32.0){
+            all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
         else {
-            all_flows[i, "inund_days"] <- 0 }
+            all_flows$inund_days[i] <- 0 }
     }
 
     # jessica's addition to fix the tails
     for (i in 2:nrow(all_flows)){
-        if (all_flows[i, "yolo_dayflow"] >= 4000 & all_flows[i-1, "inund_days"] > 0){
-            all_flows[i, "inund_days"] <- all_flows[i-1, "inund_days"]+1}
+        if (all_flows$yolo_dayflow[i] >= 4000 & all_flows$inund_days[i-1] > 0){
+            all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
     }
 
     ### add column for inundation yes (1) or no (0)
