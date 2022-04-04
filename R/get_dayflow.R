@@ -12,7 +12,7 @@ get_dayflow <- function(){
 
     # read in weir data from cache if it exists
     if (file.exists(file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"))) {
-        message("Reading dayflow data from cache.")
+        message("Reading dayflow data from cache. To clear cache, use clear_cache().")
         return(readr::read_csv(file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"),
                         progress = FALSE,
                         show_col_types = FALSE))
@@ -23,20 +23,17 @@ get_dayflow <- function(){
     m <- jsonlite::fromJSON("https://data.cnra.ca.gov/dataset/06ee2016-b138-47d7-9e85-f46fae674536.jsonld")
 
     file_table <- m$`@graph` %>%
-        dplyr::filter(.data$`dct:format` == "CSV") %>%
-        dplyr::filter(grepl("Results", .data$`dct:title`))
+        dplyr::filter(.data$`dct:format` == "CSV")
 
-    urls <- file_table$`dcat:accessURL` %>% unlist()
+    urls <- grep("results", file_table$`dcat:accessURL`$`@id`, value = TRUE)
+
 
     # read in the data
-    # this particular file has an extra table at the end (not tidy!)
-    url_2019 <- grep("dayflowcalculations2019", urls, value = TRUE)
-    url_rest <- grep("dayflowcalculations2019", urls, value = TRUE, invert = TRUE)
 
     col_types <- readr::cols(.default = readr::col_character())
     dat <- lapply(url_rest, readr::read_csv, col_types=col_types, show_col_types = FALSE, progress = FALSE)
 
-    dat[[length(dat)+1]] <- readr::read_csv(url_2019, col_types=col_types, n_max = 366, show_col_types = FALSE, progress = FALSE)
+
 
     dat_full <- do.call(dplyr::bind_rows, dat)
 
@@ -50,7 +47,6 @@ get_dayflow <- function(){
                       sac_dayflow = SAC,
                       date = Date)
 
-    # filter out all NA row
 
     # write out
     write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
