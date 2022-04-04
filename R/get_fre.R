@@ -33,3 +33,4 @@ get_fre <- function(stationID="FRE", start = "1940-01-01", end = as.character(Sy
     return(raw_fre)
 
 }
+
