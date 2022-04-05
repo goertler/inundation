@@ -1,3 +1,7 @@
+devtools::load_all()
+clear_cache()
+all_flows <- calc_indundation()
+
 head(all_flows)
 all_flows <- within(all_flows, year <- format(all_flows$date, "%Y"))
 
