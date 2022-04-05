@@ -1,9 +1,3 @@
-rm(list = c("calc_indundation", "get_dayflow", "get_fre"))
-devtools::load_all()
-clear_cache()
-
-inun <- calc_indundation()
-
 head(all_flows)
 all_flows <- within(all_flows, year <- format(all_flows$date, "%Y"))
 
