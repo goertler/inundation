@@ -31,7 +31,7 @@ get_dayflow <- function(){
     # read in the data
 
     col_types <- readr::cols(.default = readr::col_character())
-    dat <- lapply(url_rest, readr::read_csv, col_types=col_types, show_col_types = FALSE, progress = FALSE)
+    dat <- lapply(urls, readr::read_csv, col_types=col_types, show_col_types = FALSE, progress = FALSE)
 
 
 
@@ -50,5 +50,7 @@ get_dayflow <- function(){
 
     # write out
     write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
+
+    return(dayflow)
 
 }
