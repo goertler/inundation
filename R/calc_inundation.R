@@ -33,17 +33,24 @@ calc_indundation <- function(){
 
 
     dayflow <- get_dayflow()
+    dayflow_na <- na.omit(dayflow) # yolo missing before 1955
+    dayflow_na$date <- as.Date(dayflow_na$date)
 
     # merge two water datasets
-    all_flows <- dplyr::left_join(dayflow, discharge_sac_na, by = "date") %>%
+    all_flows <- merge(dayflow_na, discharge_sac_na[,-2], by = "date")
+    #all_flows <- dplyr::left_join(dayflow, discharge_sac_na, by = "date") #%>%
         # get only the subset where we filled in the sac NAs
-        dplyr::filter(!is.na(.data$height_sac_na)) %>%
-        dplyr::mutate(inund_days = NA)
+        #dplyr::filter(!is.na(.data$height_sac_na)) %>%
+        #dplyr::mutate(inund_days = NA)
 
+    # order by date
+    all_flows <- all_flows[order(as.Date(all_flows$date, format="%Y/%m/%d")),]
+    all_flows$inund_days <- 0
+    all_flows[1,5] <- 1
 
     # definition for inundation days
     # add datum change on Oct. 3, 2016
-    for (i in 1:nrow(all_flows)){
+    for (i in 2:nrow(all_flows)){
         if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] < 33.5){
             all_flows$inund_days[i] <- 0}
         else if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 33.5){
@@ -57,8 +64,16 @@ calc_indundation <- function(){
     }
 
     # jessica's addition to fix the tails
-    for (i in 2:nrow(all_flows)){
+    for (i in 3:nrow(all_flows)){
         if (all_flows$yolo_dayflow[i] >= 4000 & all_flows$inund_days[i-1] > 0){
+            all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
+    }
+
+    # correct special cases in 1995 and 2019
+    for (i in 3:nrow(all_flows)){
+        if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 33.5 & all_flows$inund_days[i-1] > 0){
+            all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
+        else if(all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 32 & all_flows$inund_days[i-1] > 0){
             all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
     }
 
