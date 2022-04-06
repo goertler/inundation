@@ -28,3 +28,7 @@ Imports:
     wateRshedTools (>= 0.1.1)
 Remotes: 
     ryanpeek
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
