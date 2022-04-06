@@ -19,14 +19,14 @@ calc_indundation <- function(){
         dplyr::summarise(height_sac = max(.data$value, na.rm = TRUE))
 
     # look for missing dates
-    time.check <- seq(as.Date('1984-01-01'),  Sys.Date(), by = 'day')
+    time.check <- seq(as.Date('1984-02-01'),  Sys.Date(), by = 'day')
 
     continous_dates <- data.frame(x = 1:length(time.check),
-                                   date = seq(as.Date('1984-01-01'),
+                                   date = seq(as.Date('1984-02-01'),
                                               Sys.Date(),
                                               by='day'))
 
-    discharge_sac_na <- dplyr::full_join(discharge_sac, continous_dates, by = "date") %>%
+    discharge_sac_na <- dplyr::left_join(continous_dates, discharge_sac, by = "date") %>%
         dplyr::select(-.data$x)
 
     discharge_sac_na$height_sac_na <- imputeTS::na_ma(discharge_sac_na$height_sac, k = 7, weighting = "exponential", maxgap = Inf)
@@ -35,42 +35,52 @@ calc_indundation <- function(){
     dayflow <- get_dayflow()
     dayflow_na <- na.omit(dayflow) # yolo missing before 1955
     dayflow_na$date <- as.Date(dayflow_na$date)
+    discharge_sac_na <- discharge_sac_na[, c("date", "height_sac_na")]
 
     # merge two water datasets
-    all_flows <- merge(dayflow_na, discharge_sac_na[,-2], by = "date")
-    #all_flows <- dplyr::left_join(dayflow, discharge_sac_na, by = "date") #%>%
-        # get only the subset where we filled in the sac NAs
-        #dplyr::filter(!is.na(.data$height_sac_na)) %>%
-        #dplyr::mutate(inund_days = NA)
+    all_flows <- merge(dayflow_na, discharge_sac_na, by = "date")
+
 
     # order by date
-    all_flows <- all_flows[order(as.Date(all_flows$date, format="%Y/%m/%d")),]
+    all_flows <- all_flows[order(all_flows$date),]
     all_flows$inund_days <- 0
-    all_flows[1,5] <- 1
 
     # definition for inundation days
     # add datum change on Oct. 3, 2016
-    for (i in 2:nrow(all_flows)){
+    for (i in 1:nrow(all_flows)){
+        # before 2016 and lower than 33.5
         if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] < 33.5){
             all_flows$inund_days[i] <- 0}
+        # higher than 2016 and higher than 33.5, inun_days = previous value + 1
         else if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 33.5){
-            all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
+            if (i == 1){
+                all_flows$inund_days[i] <- 1
+            } else {
+                all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
+            }
+
+        # after 2016 and lower than 32.0
         else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] < 32.0){
             all_flows$inund_days[i] <- 0}
+        # after 2016 and higher than 32,  inun_days = previous value + 1
         else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 32.0){
-            all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
+            if (i == 1){
+                all_flows$inund_days[i] <- 1
+            } else {
+                all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
+        }
         else {
             all_flows$inund_days[i] <- 0 }
     }
 
     # jessica's addition to fix the tails
-    for (i in 3:nrow(all_flows)){
+    for (i in 2:nrow(all_flows)){
         if (all_flows$yolo_dayflow[i] >= 4000 & all_flows$inund_days[i-1] > 0){
             all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
     }
 
     # correct special cases in 1995 and 2019
-    for (i in 3:nrow(all_flows)){
+    for (i in 2:nrow(all_flows)){
         if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 33.5 & all_flows$inund_days[i-1] > 0){
             all_flows$inund_days[i] <- all_flows$inund_days[i-1]+1}
         else if(all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 32 & all_flows$inund_days[i-1] > 0){
