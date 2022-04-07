@@ -50,7 +50,7 @@ dayflow_83 <- subset(dayflow_na, year == 1983) #Nov 12/13 dayflow drops below 4,
 flood_start <- subset(all_flows, inund_days == 1)
 flood_start <- flood_start[-1,] #get rid of Jan 1984
 mean(flood_start$yolo_dayflow) #5817.156
-# will start Feb 1984 to avoid error
+# will start Feb 1984 to avoid probably error
 
 # strange Sacramento River height values in 1989, 1990 and 1991 (39.98 & 39.91)
 
