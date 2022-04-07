@@ -11,7 +11,7 @@ Authors@R:
            family = "Goertler",
            role = c("aut"),
            email = "Pascale.Goertler@deltacouncil.ca.gov"))
-Description: Calculate Delta Inundation Metrics
+Description: The goal of inundation is to easily download and compute statistics related to Yolo Bypass inundation.
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
@@ -23,12 +23,17 @@ Imports:
     janitor,
     jsonlite,
     lubridate,
+    magrittr,
     rappdirs,
     readr,
+    rlang,
     wateRshedTools (>= 0.1.1)
 Remotes: 
     ryanpeek
 Suggests: 
     rmarkdown,
-    knitr
+    knitr,
+    ggplot2,
+    patchwork,
+    scales
 VignetteBuilder: knitr

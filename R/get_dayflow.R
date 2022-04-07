@@ -3,6 +3,7 @@
 #' @return data.frame of dayflow data
 #' @export
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 get_dayflow <- function(){
 
     # create cache dir if it doesn't exist
@@ -38,18 +39,18 @@ get_dayflow <- function(){
     dat_full <- do.call(dplyr::bind_rows, dat)
 
     dayflow <- dat_full %>%
-        dplyr::select(Date, YOLO, SAC) %>%
-        dplyr::mutate(Date = lubridate::parse_date_time(Date, orders = c("mdy", "ymd", "dmy"))) %>%
+        dplyr::select(.data$Date, .data$YOLO, .data$SAC) %>%
+        dplyr::mutate(Date = lubridate::parse_date_time(.data$Date, orders = c("mdy", "ymd", "dmy"))) %>%
         dplyr::distinct() %>%
-        dplyr::mutate(YOLO = as.numeric(YOLO),
-                      SAC = as.numeric(SAC)) %>%
-        dplyr::rename(yolo_dayflow = YOLO,
-                      sac_dayflow = SAC,
-                      date = Date)
+        dplyr::mutate(YOLO = as.numeric(.data$YOLO),
+                      SAC = as.numeric(.data$SAC)) %>%
+        dplyr::rename(yolo_dayflow = .data$YOLO,
+                      sac_dayflow =.data$ SAC,
+                      date = .data$Date)
 
 
     # write out
-    write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
+    utils::write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
 
     return(dayflow)
 

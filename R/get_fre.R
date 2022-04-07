@@ -5,6 +5,8 @@
 #' @param stationID Station identifier (see https://info.water.ca.gov/staMeta.html)
 #' @param start Start date in YYYY-MM-DD
 #' @param end End date in YYYY-MM-DD
+#' @importFrom utils read.csv
+#' @importFrom rlang .data
 #'
 #' @return data.frame of Sacramento river heights
 #' @export
@@ -28,7 +30,7 @@ get_fre <- function(stationID="FRE", start = "1940-01-01", end = as.character(Sy
     raw_fre <- janitor::clean_names(raw_fre)
 
     # write file to cache
-    write.csv(raw_fre, file.path(rappdirs::user_cache_dir("inundation"), "fre.csv"), row.names = FALSE)
+    utils::write.csv(raw_fre, file.path(rappdirs::user_cache_dir("inundation"), "fre.csv"), row.names = FALSE)
 
     return(raw_fre)
 

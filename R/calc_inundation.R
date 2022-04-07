@@ -3,6 +3,7 @@
 #' @return data.frame of dayflow data
 #' @export
 #' @importFrom magrittr %>%
+#' @importFrom rlang .data
 
 calc_indundation <- function(){
 
@@ -33,7 +34,7 @@ calc_indundation <- function(){
 
 
     dayflow <- get_dayflow()
-    dayflow_na <- na.omit(dayflow) # yolo missing before 1955
+    dayflow_na <- stats::na.omit(dayflow) # yolo missing before 1955
     dayflow_na$date <- as.Date(dayflow_na$date)
     discharge_sac_na <- discharge_sac_na[, c("date", "height_sac_na")]
 

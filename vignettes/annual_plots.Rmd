@@ -1,0 +1,88 @@
+---
+title: "Annual Plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{annual_plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE}
+library(inundation)
+library(ggplot2)
+library(patchwork)
+library(scales)
+```
+
+
+These plots show annual inundation data, including the Fremont weir height, Yolo bypass dayflow, and the number of inundation days.
+
+```{r, echo = FALSE, results = 'hide', message = FALSE}
+#load data
+all_flows <- calc_indundation()
+
+# add year
+head(all_flows)
+all_flows <- within(all_flows, year <- format(all_flows$date, "%Y"))
+```
+
+
+```{r, echo = FALSE , warning = FALSE, message = FALSE}
+
+colors_yolo <- c("#469990","#f032e6")
+breaks_yolo <- c(0, 4000, 500000)
+limits_yolo <- c(0, 500000)
+values_yolo <- scales::rescale(c(0, 4000, 500000), 
+                               from = c(0, 500000))
+    
+# sac weir
+
+colors_sac <- c('#dcbeff','#42d4f4','#3cb44b')
+breaks_sac <- c(2, 32, 33.5)
+limits_sac <- c(2, 42)
+values_sac <- scales::rescale(c(2, 32, 42), 
+                              from = c(2, 42))
+
+theme_border <- theme_gray() + 
+  theme(plot.background = element_rect(fill = NA, colour = 'black', size = 3))
+
+for (i in unique(all_flows$year)){
+    temp_dat <- all_flows[all_flows$year == i,]
+    
+    
+    p1 <- ggplot() +
+        geom_point(data = temp_dat, mapping = aes(x = date, y = height_sac_na, color = height_sac_na)) +
+        scale_color_stepsn(colours = colors_sac,
+                           breaks = breaks_sac,
+                           limits = limits_sac,
+                           values = values_sac) +
+        geom_point(data = temp_dat, mapping = aes(x = date, y = inund_days + 10, size = inund_days)) +
+        scale_size(range = c(0,1), guide = "none") +
+        scale_y_continuous("Fremont Weir Height", sec.axis = sec_axis(~ . -10, name = "Number of Inundation Days")) +
+        labs(x = "", title = i, color = "Yolo Bypass Dayflow") +
+        theme_classic()
+    
+    
+    p2 <- ggplot() +
+        geom_point(data = temp_dat, mapping = aes(x = date, y = yolo_dayflow, color = yolo_dayflow)) +
+        scale_color_stepsn(colours = colors_yolo,
+                           breaks = breaks_yolo,
+                           limits = limits_yolo,
+                           values = values_yolo) +
+        ylim(c(0, 10000)) +
+        theme_classic() +
+        labs(x = "", y = "Yolo Bypass Dayflow", color = "Yolo Bypass Dayflow")
+    
+    print(p1 + p2 + plot_layout(ncol=1) + plot_annotation(theme = theme_border))
+}
+
+```
+
+
