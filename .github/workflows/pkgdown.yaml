@@ -28,9 +28,6 @@ jobs:
           extra-packages: pkgdown, devtools
           needs: website
 
-      - name: Install ryan's package
-        run: Rscript -e "devtools::install_github('ryanpeek/wateRshedTools')"
-
       - name: Deploy package
         run: |
           git config --local user.name "$GITHUB_ACTOR"
