@@ -1,3 +1,7 @@
+  <!-- badges: start -->
+  [![R-CMD-check](https://github.com/goertler/inundation/workflows/R-CMD-check/badge.svg)](https://github.com/goertler/inundation/actions)
+  <!-- badges: end -->
+
 
 # inundation
 
