@@ -24,15 +24,30 @@ get_fre <- function(stationID="FRE", start = "1940-01-01", end = as.character(Sy
     }
 
     # download data from fre, sensor 1: Stage, duration is hourly
-    raw_fre <- suppressMessages(wateRshedTools::get_cdec(station=stationID, 1, "H", start = start, end = end))
 
-    # clean column names
-    raw_fre <- janitor::clean_names(raw_fre)
+    linkCDEC <- paste("http://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet?Stations=", stationID,
+                      "&SensorNums=", 1,
+                      "&dur_code=", "H",
+                      "&Start=", start,
+                      "&End=", end, sep="")
+
+    # Read in and Format ------------------------------------------------------
+
+    # implement and download data
+    df <- readr::read_csv(linkCDEC) %>%
+        janitor::clean_names() %>%
+        dplyr::select(-c(.data$obs_date, .data$data_flag)) %>%
+        dplyr::rename(datetime = .data$date_time) %>%
+        data.frame()
+
+    # coerce to numeric for value col, create NAs for missing values, sometimes listed as "---"
+    df$value <- suppressWarnings(as.numeric(df$value))
+
 
     # write file to cache
-    utils::write.csv(raw_fre, file.path(rappdirs::user_cache_dir("inundation"), "fre.csv"), row.names = FALSE)
+    utils::write.csv(df, file.path(rappdirs::user_cache_dir("inundation"), "fre.csv"), row.names = FALSE)
 
-    return(raw_fre)
+    return(df)
 
 }
 
