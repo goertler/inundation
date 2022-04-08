@@ -1,11 +1,12 @@
 #' Calculate number of inundation days
 #'
 #' @return data.frame of dayflow data
-#' @export
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
+#' @export
 
-calc_indundation <- function(){
+
+calc_inundation <- function(){
 
     fre <- get_fre()
     fre$date <- as.Date(fre$datetime)
@@ -91,10 +92,8 @@ calc_indundation <- function(){
     ### add column for inundation yes (1) or no (0)
     # flooding? yes (1), no (0)
     all_flows <- all_flows %>%
-        dplyr::mutate(inundation = ifelse(.data$inund_days > 0, 1, 0)) #%>%
-        #dplyr::select(-.data$height_sac) %>%
-        #dplyr::rename(height_sac = .data$height_sac_na)
+        dplyr::mutate(inundation = ifelse(.data$inund_days > 0, 1, 0)) %>%
+        dplyr::rename(height_sac = .data$height_sac_na)
 
-    #write.csv(all_flows, "data_clean/clean_inundation_days.csv", row.names = FALSE)
 
 }

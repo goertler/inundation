@@ -18,13 +18,13 @@ devtools::install_github("goertler/inundation")
 
 ## Quick Start
 
-The primary function, `calc_inundataion()` downloads all available data from the sources above, and calculates the duration of inundation days up to and including that date, and whether or not there is inundation on any given day in the Yolo Bypass (0 = no, 1 = yes). An inundation event begins when the stage height of the Sacramento River exceeds the height of the Fremont Weir, and ends when flow is reduced to within bank of the tidal perennial channel along the Yolo Bypass' eastern edge (e.g., the "Toe Drain”). For more details see [Goertler et al. 2017](https://onlinelibrary.wiley.com/doi/10.1111/eff.12372).
+The primary function, `calc_inundation()` downloads all available data from the sources above, and calculates the duration of inundation days up to and including that date, and whether or not there is inundation on any given day in the Yolo Bypass (0 = no, 1 = yes). An inundation event begins when the stage height of the Sacramento River exceeds the height of the Fremont Weir, and ends when flow is reduced to within bank of the tidal perennial channel along the Yolo Bypass' eastern edge (e.g., the "Toe Drain”). For more details see [Goertler et al. 2017](https://onlinelibrary.wiley.com/doi/10.1111/eff.12372).
 
 ``` r
 library(inundation)
 library(dplyr)
 
-inun <- calc_inundataion()
+inun <- calc_inundation()
 
 ```
 

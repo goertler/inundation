@@ -32,5 +32,7 @@ Suggests:
     knitr,
     ggplot2,
     patchwork,
-    scales
+    scales,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

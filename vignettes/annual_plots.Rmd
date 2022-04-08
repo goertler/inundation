@@ -26,7 +26,7 @@ These plots show annual inundation data, including the Fremont weir height, Yolo
 
 ```{r, echo = FALSE, results = 'hide', message = FALSE}
 #load data
-all_flows <- calc_indundation()
+all_flows <- calc_inundation()
 
 # add year
 head(all_flows)
@@ -58,7 +58,7 @@ for (i in unique(all_flows$year)){
     
     
     p1 <- ggplot() +
-        geom_point(data = temp_dat, mapping = aes(x = date, y = height_sac_na, color = height_sac_na)) +
+        geom_point(data = temp_dat, mapping = aes(x = date, y = height_sac, color = height_sac)) +
         scale_color_stepsn(colours = colors_sac,
                            breaks = breaks_sac,
                            limits = limits_sac,
