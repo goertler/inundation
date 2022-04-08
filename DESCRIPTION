@@ -26,10 +26,9 @@ Imports:
     magrittr,
     rappdirs,
     readr,
-    rlang,
-    wateRshedTools (>= 0.1.1)
+    rlang
 Remotes: 
-    ryanpeek
+    ryanpeek/wateRshedTools (>= 0.1.1)
 Suggests: 
     rmarkdown,
     knitr,
