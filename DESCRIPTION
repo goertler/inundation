@@ -1,6 +1,6 @@
 Package: inundation
 Title: Calculate Delta Inundation Metrics
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Jeanette",
            family = "Clark",
@@ -10,7 +10,11 @@ Authors@R:
     person(given = "Pascale",
            family = "Goertler",
            role = c("aut"),
-           email = "Pascale.Goertler@deltacouncil.ca.gov"))
+           email = "Pascale.Goertler@deltacouncil.ca.gov"),
+    person(given = "Ryan",
+           family = "Peek",
+           role = c("ctb"),
+           email = "rapeek@ucdavis.edu"))
 Description: The goal of inundation is to easily download and compute statistics related to Yolo Bypass inundation.
 License: Apache License (>= 2)
 Encoding: UTF-8
