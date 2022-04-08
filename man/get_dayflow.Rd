@@ -10,5 +10,13 @@ get_dayflow()
 data.frame of dayflow data
 }
 \description{
-Get Yolo bypass dayflow data
+Downloads all dayflow data and selects Yolo Bypass and Sacramento River.
+Returns data frame of daily values.
+}
+\examples{
+\dontrun{
+
+dayflow <- get_dayflow()
+
+}
 }

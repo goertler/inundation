@@ -1,6 +1,7 @@
 #' Load Fremont weir Sacramento river height
 #'
-#' see here: "https://portal.edirepository.org/nis/dataviewer?packageid=edi.840.1&entityid=186964642c42e5a8b8e44fc87ff10bbf", (1998-2021 Yolo)
+#' Download Fremont weir data giving Sacramento river height.
+#' see documentation for [1998-2021 Yolo on EDI]("https://portal.edirepository.org/nis/dataviewer?packageid=edi.840.1&entityid=186964642c42e5a8b8e44fc87ff10bbf")
 #'
 #' @param stationID Station identifier (see https://info.water.ca.gov/staMeta.html)
 #' @param start Start date in YYYY-MM-DD
@@ -10,6 +11,13 @@
 #'
 #' @return data.frame of Sacramento river heights
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#' fre <- get_fre()
+#'
+#' }
 get_fre <- function(stationID="FRE", start = "1940-01-01", end = as.character(Sys.Date())) {
 
     # create cache dir if it doesn't exist

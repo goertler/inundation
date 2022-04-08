@@ -1,9 +1,21 @@
 #' Get Yolo bypass dayflow data
 #'
+#' Downloads all dayflow data and selects Yolo Bypass and Sacramento River.
+#' Returns data frame of daily values.
+#'
 #' @return data.frame of dayflow data
+#'
 #' @export
+#'
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
+#'
+#' @examples
+#' \dontrun{
+#'
+#' dayflow <- get_dayflow()
+#'
+#' }
 get_dayflow <- function(){
 
     # create cache dir if it doesn't exist

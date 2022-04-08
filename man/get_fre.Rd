@@ -21,5 +21,13 @@ get_fre(
 data.frame of Sacramento river heights
 }
 \description{
-see here: "https://portal.edirepository.org/nis/dataviewer?packageid=edi.840.1&entityid=186964642c42e5a8b8e44fc87ff10bbf", (1998-2021 Yolo)
+Download Fremont weir data giving Sacramento river height.
+see documentation for \href{"https://portal.edirepository.org/nis/dataviewer?packageid=edi.840.1&entityid=186964642c42e5a8b8e44fc87ff10bbf"}{1998-2021 Yolo on EDI}
+}
+\examples{
+\dontrun{
+
+fre <- get_fre()
+
+}
 }

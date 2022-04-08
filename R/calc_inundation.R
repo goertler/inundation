@@ -1,9 +1,22 @@
 #' Calculate number of inundation days
 #'
+#' Downloads all available dayflow data and Fremont weir data, and calculates
+#' the number of inundation days and whether inundation is present. Returns a
+#' data frame of daily data from 1984-present.
+#'
 #' @return data.frame of dayflow data
+#'
 #' @importFrom magrittr %>%
 #' @importFrom rlang .data
+#'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#' inun <- calc_inundation()
+#'
+#' }
 
 
 calc_inundation <- function(){

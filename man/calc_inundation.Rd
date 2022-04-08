@@ -10,5 +10,14 @@ calc_inundation()
 data.frame of dayflow data
 }
 \description{
-Calculate number of inundation days
+Downloads all available dayflow data and Fremont weir data, and calculates
+the number of inundation days and whether inundation is present. Returns a
+data frame of daily data from 1984-present.
+}
+\examples{
+\dontrun{
+
+inun <- calc_inundation()
+
+}
 }
