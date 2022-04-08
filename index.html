@@ -67,6 +67,8 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
+<p><!-- badges: start --> <a href="https://github.com/goertler/inundation/actions" class="external-link"><img src="https://github.com/goertler/inundation/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <!-- badges: end --></p>
 <div class="section level1">
 <div class="page-header"><h1 id="inundation">inundation<a class="anchor" aria-label="anchor" href="#inundation"></a>
 </h1></div>
@@ -88,12 +90,12 @@
 <div class="section level2">
 <h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
-<p>The primary function, <code>calc_inundataion()</code> downloads all available data from the sources above, and calculates the duration of inundation days up to and including that date, and whether or not there is inundation on any given day in the Yolo Bypass (0 = no, 1 = yes). An inundation event begins when the stage height of the Sacramento River exceeds the height of the Fremont Weir, and ends when flow is reduced to within bank of the tidal perennial channel along the Yolo Bypass’ eastern edge (e.g., the “Toe Drain”). For more details see <a href="https://onlinelibrary.wiley.com/doi/10.1111/eff.12372" class="external-link">Goertler et al. 2017</a>.</p>
+<p>The primary function, <code><a href="reference/calc_inundation.html">calc_inundation()</a></code> downloads all available data from the sources above, and calculates the duration of inundation days up to and including that date, and whether or not there is inundation on any given day in the Yolo Bypass (0 = no, 1 = yes). An inundation event begins when the stage height of the Sacramento River exceeds the height of the Fremont Weir, and ends when flow is reduced to within bank of the tidal perennial channel along the Yolo Bypass’ eastern edge (e.g., the “Toe Drain”). For more details see <a href="https://onlinelibrary.wiley.com/doi/10.1111/eff.12372" class="external-link">Goertler et al. 2017</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">inundation</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 
-<span class="va">inun</span> <span class="op">&lt;-</span> <span class="fu">calc_inundataion</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">inun</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/calc_inundation.html">calc_inundation</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>To look at just the two data sources, you can run</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fre</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_fre.html">get_fre</a></span><span class="op">(</span><span class="op">)</span>
@@ -102,6 +104,7 @@
 <p>The fre dataset (Fremont Weir showing Sacramento River height) begins Jan. 1, 1984 and the dayflow (modeled flow) dataset begins Oct. 1, 1955 for the Yolo Bypass. The duration of inundation days calculation begins on Feb. 1, 1984 because a flood event had already begun when the fre dataset became available (roughly mid-November 1983). Additionally, if choosing to include years 1989, 1990 and 1991, there are four days in which fre values may be suspect and require further investigation (see QC vignettes for more information).</p>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
