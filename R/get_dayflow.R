@@ -5,10 +5,9 @@
 #'
 #' @return data.frame of dayflow data
 #'
-#' @export
-#'
-#' @importFrom magrittr %>%
 #' @importFrom rlang .data
+#'
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -35,8 +34,9 @@ get_dayflow <- function(){
     # get metadata
     m <- jsonlite::fromJSON("https://data.cnra.ca.gov/dataset/06ee2016-b138-47d7-9e85-f46fae674536.jsonld")
 
-    file_table <- m$`@graph` %>%
-        dplyr::filter(.data$`dct:format` == "CSV")
+    file_table <- m$`@graph`
+
+    file_table <- subset(file_table, `dct:format` == "CSV")
 
     urls <- grep("results", file_table$`dcat:accessURL`$`@id`, value = TRUE)
 
@@ -45,20 +45,26 @@ get_dayflow <- function(){
 
     col_types <- readr::cols(.default = readr::col_character())
     dat <- lapply(urls, readr::read_csv, col_types=col_types, show_col_types = FALSE, progress = FALSE)
+    suppressWarnings(dat <- lapply(dat, function(x){
+        if (is.null(x$YOLO)){
+            x$YOLO <- NA
+        }
+        return(x[, c("Date", "SAC", "YOLO")])
+    }))
 
 
 
-    dat_full <- do.call(dplyr::bind_rows, dat)
+    dayflow <- do.call(rbind, dat)
 
-    dayflow <- dat_full %>%
-        dplyr::select(.data$Date, .data$YOLO, .data$SAC) %>%
-        dplyr::mutate(Date = lubridate::parse_date_time(.data$Date, orders = c("mdy", "ymd", "dmy"))) %>%
-        dplyr::distinct() %>%
-        dplyr::mutate(YOLO = as.numeric(.data$YOLO),
-                      SAC = as.numeric(.data$SAC)) %>%
-        dplyr::rename(yolo_dayflow = .data$YOLO,
-                      sac_dayflow =.data$ SAC,
-                      date = .data$Date)
+    dayflow$Date <- lubridate::parse_date_time(dayflow$Date, orders = c("mdy", "ymd", "dmy"))
+    dayflow$YOLO <- as.numeric(dayflow$YOLO)
+    dayflow$SAC <- as.numeric(dayflow$SAC)
+
+    dayflow <- janitor::clean_names(dayflow)
+
+    i <- which(!duplicated(dayflow))
+
+    dayflow <- dayflow[i, ]
 
 
     # write out

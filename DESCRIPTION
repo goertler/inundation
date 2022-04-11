@@ -22,12 +22,10 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
-    dplyr,
     imputeTS,
     janitor,
     jsonlite,
     lubridate,
-    magrittr,
     rappdirs,
     readr,
     rlang

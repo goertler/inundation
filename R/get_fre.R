@@ -7,7 +7,6 @@
 #' @param start Start date in YYYY-MM-DD
 #' @param end End date in YYYY-MM-DD
 #' @importFrom utils read.csv
-#' @importFrom rlang .data
 #'
 #' @return data.frame of Sacramento river heights
 #' @export
@@ -42,11 +41,13 @@ get_fre <- function(stationID="FRE", start = "1940-01-01", end = as.character(Sy
     # Read in and Format ------------------------------------------------------
 
     # implement and download data
-    df <- readr::read_csv(linkCDEC) %>%
-        janitor::clean_names() %>%
-        dplyr::select(-c(.data$obs_date, .data$data_flag)) %>%
-        dplyr::rename(datetime = .data$date_time) %>%
-        data.frame()
+    df <- readr::read_csv(linkCDEC)
+    df <- janitor::clean_names(df)
+    i <- which(names(df) %in% c("obs_date", "data_flag"))
+    df <- df[,-i]
+
+    i <- which(names(df) == "date_time")
+    names(df)[i] <- "datetime"
 
     # coerce to numeric for value col, create NAs for missing values, sometimes listed as "---"
     df$value <- suppressWarnings(as.numeric(df$value))
