@@ -14,7 +14,15 @@ Authors@R:
     person(given = "Ryan",
            family = "Peek",
            role = c("ctb"),
-           email = "rapeek@ucdavis.edu"))
+           email = "rapeek@ucdavis.edu"),
+    person(given = "Jessica",
+            family = "Guo", 
+            role = c("ctb"),
+            email = "jessicaguo@arizona.edu"),
+    person(given = "Michael",
+            family = "Beakes",
+            role = c("ctb"),
+            email = "mbeakes@usbr.gov"))
 Description: The goal of inundation is to easily download and compute statistics related to Yolo Bypass inundation.
 License: Apache License (>= 2)
 Encoding: UTF-8
