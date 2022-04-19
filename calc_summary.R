@@ -1,0 +1,77 @@
+# max inundation days by water year
+# total inundation days per water year
+# date of and flood peak value (max of dayflow) by water year
+# first and last overtopping date by water year
+# last day of flooding
+# number of overtopping events
+
+# library
+library(devtools)
+devtools::install_github("ryanpeek/wateRshedTools")
+library(wateRshedTools)
+library(dplyr)
+
+calc_summary <- function(){
+
+    # load data
+    all_flows <- calc_inundation()
+
+    # add water year
+    all_flows <- wateRshedTools::add_WYD(all_flows, "date")
+    # remove 1984, because incomplete
+    all_flows <- subset(all_flows, WY != 1984)
+
+    # max inundation days per water year
+    inundation_max<- aggregate(all_flows['inund_days'], by = all_flows['WY'], max)
+
+    # date of and flood peak value (max of dayflow) by water year
+    flood_timing <- all_flows %>%
+        group_by(WY) %>%
+        filter(yolo_dayflow == max(yolo_dayflow)) %>%
+        distinct(yolo_dayflow,.keep_all = T) %>%
+        ungroup()
+
+    #overtopping
+    #subset dates of FRE overtopping events
+    overtopping_pre_datum <- subset(all_flows, height_sac >= 33.5 & date < as.Date("2016-10-03"))
+    overtopping_post_datum <- subset(all_flows, height_sac >= 32.0 & date >= as.Date("2016-10-03"))
+    overtopping <- rbind(overtopping_pre_datum, overtopping_post_datum)
+    head(overtopping)
+
+    # last overtopping date by water year
+    topping_timing <- overtopping %>%
+        group_by(WY) %>%
+        summarise(max = max(date))
+
+    # number of overtopping events
+    # consecutive dates T/F
+    overtopping <- overtopping[order(as.Date(overtopping$date, format="%Y/%m/%d")),]
+    overtopping$consecutive <- c(NA,diff(as.Date(overtopping$date))==1)
+
+    num_events <-
+        overtopping %>%
+        filter(consecutive == FALSE) %>%
+        group_by(WY) %>%
+        summarise(number_of_events = n())
+
+    # last day of flooding and total days of inundation by water year
+    inundation_summarised <-
+        all_flows %>%
+        filter(inundation > 0) %>%
+        group_by(WY) %>%
+        summarise(total_days_inund = n(), # count number of rows in each group
+                  first_date_inund = min(date),
+                  last_date_inund = max(date))
+
+    # put the summaries together
+
+    head(inundation_summarised)
+    colnames(inundation_max)[2] <- "max_days_inund"
+    colnames(flood_timing)[1:2] <- c("date_dayflow_peak", "dayflow_peak")
+    colnames(topping_timing)[2] <- "last_date_overtopping"
+
+    inundation_summarised <- merge(merge(merge(inundation_summarised, inundation_max, by = "WY", all = TRUE), topping_timing, by = "WY", all = TRUE), num_events, by = "WY", all = TRUE)
+
+
+}
+
