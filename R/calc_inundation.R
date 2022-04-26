@@ -39,7 +39,7 @@ calc_inundation <- function(){
                                               Sys.Date(),
                                               by='day'))
 
-    discharge_sac_na <- merge(continous_dates, discharge_sac, by = "date")
+    discharge_sac_na <- merge(continous_dates, discharge_sac, by = "date", all.x = TRUE)
 
     discharge_sac_na$height_sac_na <- imputeTS::na_ma(discharge_sac_na$height_sac, k = 7, weighting = "exponential", maxgap = Inf)
 
