@@ -1,7 +1,7 @@
 #' Load Fremont weir Sacramento river height
 #'
 #' Download Fremont weir data giving Sacramento river height.
-#' see documentation for [1998-2021 Yolo on EDI](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.840.1)
+#' see documentation for 1998-2021 Yolo on EDI: https://portal.edirepository.org/nis/mapbrowse?packageid=edi.840.1
 #'
 #' @param start Start date in YYYY-MM-DD
 #' @param end End date in YYYY-MM-DD
