@@ -4,15 +4,9 @@
 \alias{get_fre}
 \title{Load Fremont weir Sacramento river height}
 \usage{
-get_fre(
-  stationID = "FRE",
-  start = "1940-01-01",
-  end = as.character(Sys.Date())
-)
+get_fre(start = "1940-01-01", end = as.character(Sys.Date()))
 }
 \arguments{
-\item{stationID}{Station identifier (see https://info.water.ca.gov/staMeta.html)}
-
 \item{start}{Start date in YYYY-MM-DD}
 
 \item{end}{End date in YYYY-MM-DD}
@@ -22,7 +16,7 @@ data.frame of Sacramento river heights
 }
 \description{
 Download Fremont weir data giving Sacramento river height.
-see documentation for \href{"https://portal.edirepository.org/nis/dataviewer?packageid=edi.840.1&entityid=186964642c42e5a8b8e44fc87ff10bbf"}{1998-2021 Yolo on EDI}
+see documentation for \href{"https://portal.edirepository.org/nis/mapbrowse?packageid=edi.840.1"}{1998-2021 Yolo on EDI}
 }
 \examples{
 \dontrun{
