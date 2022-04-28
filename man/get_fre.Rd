@@ -16,7 +16,7 @@ data.frame of Sacramento river heights
 }
 \description{
 Download Fremont weir data giving Sacramento river height.
-see documentation for \href{"https://portal.edirepository.org/nis/mapbrowse?packageid=edi.840.1"}{1998-2021 Yolo on EDI}
+see documentation for \href{https://portal.edirepository.org/nis/mapbrowse?packageid=edi.840.1}{1998-2021 Yolo on EDI}
 }
 \examples{
 \dontrun{
