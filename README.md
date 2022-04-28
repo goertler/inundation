@@ -1,5 +1,6 @@
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/goertler/inundation/workflows/R-CMD-check/badge.svg)](https://github.com/goertler/inundation/actions)
+  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6450272.svg)](https://doi.org/10.5281/zenodo.6450272)
   <!-- badges: end -->
 
 
