@@ -19,11 +19,32 @@ library(inundation)
 
 ```
 
+These plots show the utility and explain the ecological relevance of the calc_summary function. The calc_summary function summarized the calc_inundation output over water year:
 
+total_days_inund: total number of inundation days 
+max_days_inund: maximum number of consecutive days of inundation 
+first_date_inund: first date of inundation
+last_date_inund: last date of inundation
+last_date_overtopping: last date that the Fremont Weir was overtopped
+number_overtopping_events: total number of inundation events
+
+Note that total_days_inund will equal max_days_inund when there is a single inundation event within a water year. Also note that last_date_overtopping and last_date_inund may be equal when the floodplain drains quickly (e.g., there is no or limited western tributary input), and that the first_date_inund is also the first day of overtopping within a given water year because the calc_inundation function requires Fremont Weir overtopping to begin an inundation event. 
 
 ```{r, echo = FALSE, results = 'hide', message = FALSE}
 #load data
 inundation_summarised <- calc_summary()
 
+```
 
+The relationship between total_days_inund, max_days_inund and number_overtopping_events
+```{r, echo = FALSE , warning = FALSE, message = FALSE}
+
+plot(inundation_summarised$total_days_inund, inundation_summarised$max_days_inund, 
+     cex = inundation_summarised$number_overtopping_events,
+     xlab = "Total Days of Inundation per WY",
+     ylab = "Max Number of Consecutive Days of Inundation per WY")
+
+text(inundation_summarised$total_days_inund, inundation_summarised$max_days_inund-3, labels=inundation_summarised$water_year)
+
+legend("topleft", "Point size is proportional to the Number of Events")
 ```
