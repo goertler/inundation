@@ -41,10 +41,22 @@ The relationship between total_days_inund, max_days_inund and number_overtopping
 
 plot(inundation_summarised$total_days_inund, inundation_summarised$max_days_inund, 
      cex = inundation_summarised$number_overtopping_events,
-     xlab = "Total Days of Inundation per WY",
-     ylab = "Max Number of Consecutive Days of Inundation per WY")
+     xlab = "Total days of inundation per WY",
+     ylab = "Max number of consecutive days of inundation per WY")
 
 text(inundation_summarised$total_days_inund, inundation_summarised$max_days_inund-3, labels=inundation_summarised$water_year)
 
-legend("topleft", "Point size is proportional to the Number of Events")
+legend("topleft", c("Point size is proportional to the number of events", "Water year is written under the point"))
 ```
+
+The relationship between last_date_inund and last_date_overtopping, which can be interpreted as the impact of small westside streams, such as Knight's Landing Ridge Cut, Cache Creek, and Putah Creek. Zero here means that inundation ended on the same date as overstopping of the Fremont Weir ended (e.g., inputs from the Sacramento River). The Sacramento Weir also overtopped in 1998, 2006 and 2017.
+```{r, echo = FALSE , warning = FALSE, message = FALSE}
+inund_dates <- na.omit(inundation_summarised[,c(1,4,6)])
+inund_dates$diff <- inund_dates$last_date_inund-inund_dates$last_date_overtopping
+
+plot(inund_dates$water_year, inund_dates$diff, 
+     xlab = "Water year", ylab = "Difference (in days) between when the inundation and overtopping events end")
+
+text(inund_dates$water_year, inund_dates$diff-1, labels=inund_dates$water_year)
+```
+
