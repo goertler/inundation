@@ -1,0 +1,29 @@
+---
+title: "inundation_summary"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{annual_plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+library(inundation)
+
+```
+
+
+
+```{r, echo = FALSE, results = 'hide', message = FALSE}
+#load data
+inundation_summarised <- calc_summary()
+
+
+```
