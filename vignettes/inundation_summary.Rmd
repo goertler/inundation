@@ -49,7 +49,7 @@ text(inundation_summarised$total_days_inund, inundation_summarised$max_days_inun
 legend("topleft", c("Point size is proportional to the number of events", "Water year is written under the point"))
 ```
 
-The relationship between last_date_inund and last_date_overtopping, which can be interpreted as the impact of small westside streams, such as Knight's Landing Ridge Cut, Cache Creek, and Putah Creek. Zero here means that inundation ended on the same date as overstopping of the Fremont Weir ended (e.g., inputs from the Sacramento River). The Sacramento Weir also overtopped in 1998, 2006 and 2017.
+The relationship between last_date_inund and last_date_overtopping, which can be interpreted as the impact of small westside streams, such as Knight's Landing Ridge Cut, Cache Creek, and Putah Creek. Zero here means that inundation ended on the same date as overstopping of the Fremont Weir ended (e.g., when inputs from the Sacramento River end). Impacts of the Sacramento Weir overtopping is not included here, and does not seem to impact this relationship (most noticeably 1998, 2006 and 2017).
 ```{r, echo = FALSE , warning = FALSE, message = FALSE}
 inund_dates <- na.omit(inundation_summarised[,c(1,4,6)])
 inund_dates$diff <- inund_dates$last_date_inund-inund_dates$last_date_overtopping
@@ -58,5 +58,35 @@ plot(inund_dates$water_year, inund_dates$diff,
      xlab = "Water year", ylab = "Difference (in days) between when the inundation and overtopping events end")
 
 text(inund_dates$water_year, inund_dates$diff-1, labels=inund_dates$water_year)
+```
+
+Summary plot to show the complexity in how and when the Yolo Bypass floods
+```{r, echo = FALSE , warning = FALSE, message = FALSE}
+# plot by month of start and end inundation
+inundation_summarised$f_month <- as.numeric(strftime(inundation_summarised$first_date_inund,"%m"))
+inundation_summarised$l_month <-  as.numeric(strftime(inundation_summarised$last_date_inund,"%m"))
+
+inundation_summarised$f_month <- factor(inundation_summarised$f_month, levels = c(12,1,2,3,4,5),  labels = c("Dec","Jan","Feb","Mar","Apr","May"))
+
+inundation_summarised$l_month <- factor(inundation_summarised$l_month, levels = c(12,1,2,3,4,5,6,7,8,9),  labels = c("Dec","Jan","Feb","Mar","Apr","May","Jun", "Jul", "Aug", "Sep"))
+
+# color ramp by as number of events
+max(inundation_summarised$number_overtopping_events)
+rbPal <- colorRampPalette(c('red','blue'))
+inundation_summarised$number_overtopping_events <- as.numeric(inundation_summarised$number_overtopping_events)
+inundation_summarised$Col <- rbPal(4)[as.numeric(cut(inundation_summarised$number_overtopping_events,breaks = 4))]
+
+inundation_summarised$total_days_inund <- as.numeric(inundation_summarised$total_days_inund)
+
+plot(as.numeric(inundation_summarised$f_month), as.numeric(inundation_summarised$l_month), cex = inundation_summarised$total_days_inund/10, col = alpha(inundation_summarised$Col, 0.4), xlim = c(0,6), xlab = "Month of inundation start", ylab = "Month of inundation end", xaxt = "n", yaxt = "n", pch = 16)
+
+mtext(text = c("", "Dec","Jan","Feb","Mar","Apr","May"), outer = FALSE, side = 1, las = 1, at = 0:6, line =1)
+
+mtext(text = c("Dec","Jan","Feb","Mar","Apr","May","Jun", "Jul", "Aug", "Sep"), outer = FALSE, side = 2, las = 1, at = 1:10, line =1)
+
+legend("topleft", c("Point size is proportional to total inundation days", "1 event", "4 events"), pch = 16, col = c("white", "#FF0000", "#0000FF"))
+
+#ggplot(inundation_summarised, aes(x = f_month, y = l_month, size = total_days_inund, col = number_overtopping_events)) + geom_point()
+
 ```
 
