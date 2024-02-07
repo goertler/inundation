@@ -1,5 +1,6 @@
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/goertler/inundation/workflows/R-CMD-check/badge.svg)](https://github.com/goertler/inundation/actions)
+  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6450272.svg)](https://doi.org/10.5281/zenodo.6450272)
   <!-- badges: end -->
 
 
@@ -41,4 +42,4 @@ dayflow <- get_dayflow()
 
 These two functions will read from a cache if one exists. To view cached files, or delete cached files, use `show_cache` or `clear_cache`, respectively. 
 
-The fre dataset (Fremont Weir showing Sacramento River height) begins Jan. 1, 1984 and the dayflow (modeled flow) dataset begins Oct. 1, 1955 for the Yolo Bypass. The duration of inundation days calculation begins on Feb. 1, 1984 because a flood event had already begun when the fre dataset became available (roughly mid-November 1983). Additionally, if choosing to include years 1989, 1990 and 1991, there are four days in which fre values may be suspect and require further investigation (see QC vignettes for more information). 
+The fre dataset (Fremont Weir showing Sacramento River height) begins Jan. 1, 1984 and the dayflow (modeled flow) dataset begins Oct. 1, 1955 for the Yolo Bypass. The duration of inundation days calculation begins on Feb. 1, 1984 because a flood event had already begun when the fre dataset became available (roughly mid-November 1983). Additionally, if choosing to include years 1989, 1990 and 1991, there are four days in which fre values may be suspect and require further investigation (see [QC vignettes](https://goertler.github.io/inundation/articles/annual_plots.html) for more information). 

@@ -1,9 +1,8 @@
 #' Load Fremont weir Sacramento river height
 #'
 #' Download Fremont weir data giving Sacramento river height.
-#' see documentation for [1998-2021 Yolo on EDI]("https://portal.edirepository.org/nis/dataviewer?packageid=edi.840.1&entityid=186964642c42e5a8b8e44fc87ff10bbf")
+#' see documentation for [1998-2021 Yolo on EDI](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.840.1)
 #'
-#' @param stationID Station identifier (see https://info.water.ca.gov/staMeta.html)
 #' @param start Start date in YYYY-MM-DD
 #' @param end End date in YYYY-MM-DD
 #' @importFrom utils read.csv
@@ -17,7 +16,7 @@
 #' fre <- get_fre()
 #'
 #' }
-get_fre <- function(stationID="FRE", start = "1940-01-01", end = as.character(Sys.Date())) {
+get_fre <- function(start = "1940-01-01", end = as.character(Sys.Date())) {
 
     # create cache dir if it doesn't exist
     if (!(dir.exists(rappdirs::user_cache_dir("inundation")))) {
@@ -31,6 +30,8 @@ get_fre <- function(stationID="FRE", start = "1940-01-01", end = as.character(Sy
     }
 
     # download data from fre, sensor 1: Stage, duration is hourly
+
+    stationID <- "FRE"
 
     linkCDEC <- paste("http://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet?Stations=", stationID,
                       "&SensorNums=", 1,
