@@ -38,7 +38,8 @@ get_dayflow <- function(){
 
     file_table <- subset(file_table, `dct:format` == "CSV")
 
-    urls <- grep("results", file_table$`dcat:accessURL`$`@id`, value = TRUE)
+    t <- grep("Results", file_table$`dct:title`)
+    urls <- file_table$`dcat:accessURL`$`@id`[t]
 
 
     # read in the data
