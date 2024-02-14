@@ -44,8 +44,26 @@ get_dayflow <- function(){
 
     # read in the data
 
+    # set the column type to 'character'
     col_types <- readr::cols(.default = readr::col_character())
-    dat <- lapply(urls, readr::read_csv, col_types=col_types, show_col_types = FALSE, progress = FALSE)
+    # make an empty list
+    dat <- list()
+    # for every url...
+    for (i in 1:length(urls)){
+        # if the url corresponds to the dayflowcalculations2019 csv file,
+        if (grepl(pattern = "dayflowcalculations2019", x = urls[i])){
+            # read in the csv with some special parsing (read in the columns from 'Year' to 'X2' for the first 365 lines)
+            suppressWarnings(dat_file <- readr::read_csv(urls[i], n_max = 365, col_select = c(Year:X2),
+                                                         col_types=col_types, show_col_types = T, progress = T))
+            # add the csv to our list of files
+            dat[[i]] <- dat_file
+        } else {
+            # else for every other url, read in the csv normally
+            dat_file <- readr::read_csv(urls[i], col_types=col_types, show_col_types = T, progress = T)
+            # add the csv to our list of files
+            dat[[i]] <- dat_file
+        }
+    }
     suppressWarnings(dat <- lapply(dat, function(x){
         if (is.null(x$YOLO)){
             x$YOLO <- NA
