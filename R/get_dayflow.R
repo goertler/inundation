@@ -81,14 +81,31 @@ get_dayflow <- function(){
 
     dayflow <- janitor::clean_names(dayflow)
 
-    i <- which(!duplicated(dayflow))
+    # duplicates & triplicates beginning in 2018
+    # identifies duplicate dates and takes yolo value that is most similar to previous date's value
+    dayflow_test <- as.data.frame(dayflow)
 
-    dayflow <- dayflow[i, ]
+    dayflow_test <- dayflow_test[order(dayflow_test$date), ]
 
+    dayflow_test$dups <- NA
+
+    for(i in 1:nrow(dayflow_test)){
+        dayflow_test$dups[i] <- nrow(dayflow_test[dayflow_test$date==dayflow_test$date[i],])
+    }
+
+    for(i in 2:length(unique(dayflow_test$date))){
+        if(nrow(dayflow_test[dayflow_test$date==dayflow_test$date[i],])==1)
+            next
+        if(nrow(dayflow_test[dayflow_test$date==dayflow_test$date[i],]) > 1)
+            min.val <- which.min(abs(dayflow_test[dayflow_test$date == dayflow_test$date[i], "yolo"]-dayflow_test$yolo[i-1]))
+        rnames <- row.names(dayflow_test[dayflow_test$date == dayflow_test$date[i],])[-min.val]
+        dayflow_test <- dayflow_test[!(row.names(dayflow_test) %in% rnames),]
+
+    }
 
     # write out
-    utils::write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
+    utils::write.csv(dayflow_test[,-4], file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
 
-    return(dayflow)
+    return(dayflow_test[,-4])
 
 }
