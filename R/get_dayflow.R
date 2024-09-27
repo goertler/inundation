@@ -79,12 +79,23 @@ get_dayflow <- function(){
     dayflow$YOLO <- as.numeric(dayflow$YOLO)
     dayflow$SAC <- as.numeric(dayflow$SAC)
 
-    dayflow <- janitor::clean_names(dayflow)
+    names(dayflow) <- c("date", "sac", "yolo")
 
-    i <- which(!duplicated(dayflow))
+    # duplicates & triplicates beginning in 2018
+    # identifies duplicate dates and takes yolo value that is most similar to previous date's value
+    dayflow <- as.data.frame(dayflow)
 
-    dayflow <- dayflow[i, ]
+    dayflow <- dayflow[order(dayflow$date), ]
 
+    for(i in 2:length(unique(dayflow$date))){
+        if(nrow(dayflow[dayflow$date==dayflow$date[i],])==1)
+            next
+        if(nrow(dayflow[dayflow$date==dayflow$date[i],]) > 1)
+            min.val <- which.min(abs(dayflow[dayflow$date == dayflow$date[i], "yolo"]-dayflow$yolo[i-1]))
+        rnames <- row.names(dayflow[dayflow$date == dayflow$date[i],])[-min.val]
+        dayflow <- dayflow[!(row.names(dayflow) %in% rnames),]
+
+    }
 
     # write out
     utils::write.csv(dayflow, file.path(rappdirs::user_cache_dir("inundation"), "dayflow.csv"), row.names = FALSE)
