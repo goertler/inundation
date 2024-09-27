@@ -64,8 +64,10 @@ calc_inundation <- function(){
     # add datum change on Oct. 3, 2016
     for (i in 1:nrow(all_flows)){
         # before 2016 and lower than 33.5
-        if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] < 33.5){
+        if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] < 33.5 & all_flows$yolo_dayflow[i] < 4000){
             all_flows$inund_days[i] <- 0}
+        else if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] < 33.5 & all_flows$yolo_dayflow[i] >= 4000){
+            all_flows$inund_days[i] <- 1}
         # higher than 2016 and higher than 33.5, inun_days = previous value + 1
         else if (all_flows$date[i] < as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 33.5){
             if (i == 1){
@@ -75,8 +77,10 @@ calc_inundation <- function(){
             }
 
         # after 2016 and lower than 32.0
-        else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] < 32.0){
+        else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] < 32.0 & all_flows$yolo_dayflow[i] < 4000){
             all_flows$inund_days[i] <- 0}
+        else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] < 32.0 & all_flows$yolo_dayflow[i] >= 4000){
+            all_flows$inund_days[i] <- 1}
         # after 2016 and higher than 32,  inun_days = previous value + 1
         else if (all_flows$date[i] >= as.Date("2016-10-03") & all_flows$height_sac_na[i] >= 32.0){
             if (i == 1){
